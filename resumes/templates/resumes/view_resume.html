@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Просмотр резюме{% endblock %}
+{% block content %}
+<h2>{{ resume.name }}</h2>
+<p>Email: {{ resume.email }}</p>
+<p>Телефон: {{ resume.phone }}</p>
+<h3>Образование</h3>
+<p>{{ resume.education }}</p>
+<h3>Опыт работы</h3>
+<p>{{ resume.experience }}</p>
+<h3>Навыки</h3>
+<p>{{ resume.skills }}</p>
+{% endblock %}
