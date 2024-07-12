@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Список Мест Работы{% endblock %}
+{% block content %}
+<div class="workplace-list-container">
+    <h2>Список Мест Работы</h2>
+    <ul>
+        {% for workplace in workplaces %}
+        <li>
+            <a href="{% url 'workplace_detail' workplace.pk %}">{{ workplace.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

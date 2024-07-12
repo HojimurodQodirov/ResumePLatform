@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+<div class="workplace-list-container">
+    <h2>Главная</h2>
+    <ul>
+        {% for new in news %}
+        <li>
+            <a href="{% url 'workplace_detail' workplace.pk %}">{{ new.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

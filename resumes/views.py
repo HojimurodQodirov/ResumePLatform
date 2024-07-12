@@ -2,9 +2,42 @@ from rest_framework import generics
 from .models import Resume
 from .serializers import ResumeSerializer
 from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import ResumeForm
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import WorkPlaceForm
+from .models import WorkPlace
+
+
+def create_workplace(request):
+    if request.method == 'POST':
+        form = WorkPlaceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('workplace_list')
+    else:
+        form = WorkPlaceForm()
+    return render(request, 'resumes/create_workplace.html', {'form': form})
+
+
+def resume_list(request):
+    resumes = Resume.objects.all()
+    return render(request, 'resumes/resume_list.html', {'resumes': resumes})
+
+
+def home_list(request):
+    resumes = Resume.objects.all()
+    return render(request, 'resumes/home.html', {'resumes': resumes})
+
+
+def workplace_list(request):
+    workplaces = WorkPlace.objects.all()
+    return render(request, 'resumes/workplace_list.html', {'workplaces': workplaces})
+
+
+def workplace_detail(request, pk):
+    workplace = get_object_or_404(WorkPlace, pk=pk)
+    return render(request, 'resumes/workplace_detail.html', {'workplace': workplace})
 
 
 class ResumeListCreateView(generics.ListCreateAPIView):

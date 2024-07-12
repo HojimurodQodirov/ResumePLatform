@@ -13,3 +13,24 @@ class Resume(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class WorkPlace(models.Model):
+    title = models.CharField(max_length=255)
+    location = models.URLField()
+    email = models.EmailField()
+    phone = models.CharField(max_length=255)
+    vacation = models.CharField(max_length=255)
+    about = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+
+class News(models.Model):
+    title = models.CharField(max_length=255)
+    image = models.ImageField()
+    content = models.TextField()
+
+    def __str__(self):
+        return self.title

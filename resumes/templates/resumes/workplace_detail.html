@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Детали Места Работы{% endblock %}
+{% block content %}
+<div class="workplace-detail-container">
+    <h2>{{ workplace.title }}</h2>
+    <p><strong>Сайт:</strong> <a href="{{ workplace.location }}">{{ workplace.location }}</a></p>
+    <p><strong>Электронная почта:</strong> {{ workplace.email }}</p>
+    <p><strong>Телефон:</strong> {{ workplace.phone }}</p>
+    <p><strong>Вакансия:</strong> {{ workplace.vacation }}</p>
+    <p><strong>Описание:</strong> {{ workplace.about }}</p>
+</div>
+{% endblock %}
