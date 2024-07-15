@@ -8,5 +8,21 @@
     <p><strong>Телефон:</strong> {{ workplace.phone }}</p>
     <p><strong>Вакансия:</strong> {{ workplace.vacation }}</p>
     <p><strong>Описание:</strong> {{ workplace.about }}</p>
+
+    <h3>Рейтинги:</h3>
+    <ul>
+        {% for rating in workplace.ratings.all %}
+        <li>{{ rating.user.username }}: {{ rating.score }}<br>{{ rating.comment }}</li>
+        {% empty %}
+        <li>Пока нет рейтингов.</li>
+        {% endfor %}
+        </ul>
+
+    <h3>Оставить рейтинг:</h3>
+        <form method="post" action="{% url 'create_rating' workplace.id %}">
+            {% csrf_token %}
+            {{ rating_form.as_p }}
+            <button type="submit">Оставить рейтинг</button>
+        </form>
 </div>
 {% endblock %}

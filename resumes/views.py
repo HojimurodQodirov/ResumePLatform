@@ -1,12 +1,43 @@
 from rest_framework import generics
-from .models import Resume
+from .models import Resume, News
 from .serializers import ResumeSerializer
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.decorators import login_required
 from .forms import ResumeForm
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import WorkPlaceForm
+from .forms import WorkPlaceForm, RatingForm, CommentForm
 from .models import WorkPlace
+
+
+@login_required
+def create_rating(request, workplace_id):
+    workplace = get_object_or_404(WorkPlace, id=workplace_id)
+    if request.method == 'POST':
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            rating = form.save(commit=False)
+            rating.user = request.user
+            rating.workplace = workplace
+            rating.save()
+            return redirect('workplace_detail', pk=workplace.id)
+    else:
+        form = RatingForm()
+    return render(request, 'resumes/create_rating.html', {'form': form, 'workplace': workplace})
+
+
+@login_required
+def create_comments(request, resume_id):
+    resume = get_object_or_404(Resume, id=resume_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.save()
+            return redirect('resume_detail', pk=resume.id)
+    else:
+        form = CommentForm()
+    return render(request, 'resumes/creating_comments.html', {'form': form, 'resume': resume})
 
 
 def create_workplace(request):
@@ -26,8 +57,13 @@ def resume_list(request):
 
 
 def home_list(request):
-    resumes = Resume.objects.all()
-    return render(request, 'resumes/home.html', {'resumes': resumes})
+    news = News.objects.all()
+    return render(request, 'resumes/home.html', {'news': news})
+
+
+def news_detail(request, pk):
+    news = get_object_or_404(News, pk=pk)  # Используйте модель News вместо WorkPlace
+    return render(request, 'resumes/news.html', {'news': news})
 
 
 def workplace_list(request):
@@ -37,7 +73,15 @@ def workplace_list(request):
 
 def workplace_detail(request, pk):
     workplace = get_object_or_404(WorkPlace, pk=pk)
-    return render(request, 'resumes/workplace_detail.html', {'workplace': workplace})
+    rating_form = RatingForm()
+    return render(request, 'resumes/workplace_detail.html', {'workplace': workplace, 'rating_form': rating_form})
+
+
+@login_required
+def view_resume(request, pk):
+    resume = get_object_or_404(WorkPlace, pk=pk)
+    comment_form = CommentForm()
+    return render(request, 'resumes/view_resume.html', {'resume': resume, 'comment_form': comment_form})
 
 
 class ResumeListCreateView(generics.ListCreateAPIView):
@@ -69,7 +113,4 @@ def create_resume(request):
     return render(request, 'resumes/create_resume.html', {'form': form})
 
 
-@login_required
-def view_resume(request, resume_id):
-    resume = Resume.objects.get(id=resume_id)
-    return render(request, 'resumes/view_resume.html', {'resume': resume})
+

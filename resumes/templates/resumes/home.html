@@ -4,9 +4,9 @@
 <div class="workplace-list-container">
     <h2>Главная</h2>
     <ul>
-        {% for new in news %}
+        {% for news in news %}
         <li>
-            <a href="{% url 'workplace_detail' workplace.pk %}">{{ new.title }}</a>
+            <a href="{% url 'news_detail' news.pk %}">{{ news.title }}</a>
         </li>
         {% endfor %}
     </ul>

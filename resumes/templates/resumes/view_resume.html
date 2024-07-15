@@ -1,13 +1,26 @@
 {% extends "base.html" %}
-{% block title %}Детали Резюме{% endblock %}
+{% block title %}{{ resume.name }}{% endblock %}
 {% block content %}
-<div class="resume-detail-container">
-    <h2>{{ resume.user }}</h2>
-    <p><strong>образования:</strong> {{resume.education}}</p>
-    <p><strong>Опыт:</strong> {{ resume.experience }}</p>
-    <p><strong>Навыки:</strong> {{ resume.skills}}</p>
-    <p><strong>Телефон:</strong> {{ resume.phone }}</p>
-    <p><strong>Электронная почта:</strong> {{ resume.email }}</p>
+    <h2>{{ resume.name }}</h2>
+    <p>Email: {{ resume.email }}</p>
+    <p>Телефон: {{ resume.phone }}</p>
+    <p>Образование: {{ resume.education }}</p>
+    <p>Опыт: {{ resume.experience }}</p>
+    <p>Навыки: {{ resume.skills }}</p>
 
-</div>
+    <h3>Комментарии:</h3>
+    <ul>
+        {% for comment in resume.comments.all %}
+        <li>{{ comment.user.username }}: {{ comment.text }}<br>{{ comment.created_at }}</li>
+        {% empty %}
+        <li>Пока нет комментариев.</li>
+    {% endfor %}
+</ul>
+
+<h3>Оставить комментарий:</h3>
+<form method="post" action="{% url 'create_comment' resume.id %}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit">Оставить комментарий</button>
+</form>
 {% endblock %}
